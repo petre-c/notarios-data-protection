@@ -1,0 +1,308 @@
+/*
+  NotariOS: პერსონალური მონაცემები და ნოტარიუსის პასუხისმგებლობა.
+
+  გვერდი იკითხება დესკტოპზე, 1920x1080 ან მეტ ეკრანზე. განლაგება:
+    - შიგთავსის სიგანე 1920px-ზე დაახლოებით 1700px, 2560px-ზე 2100px-მდე;
+    - მარცხნივ მიმაგრებული სარჩევი (~280px), მიმდინარე ნაწილი მონიშნულია;
+    - მთავარი სვეტი ~1400px; გაბმული ტექსტი ~100 ქართული სიმბოლო სტრიქონში;
+    - ცხრილები და ეტაპების ბადე მთავარ სვეტს მთლიანად ავსებს, შიდა სქროლის გარეშე;
+    - ვიწრო ფანჯარაში (1100px-ზე ნაკლები) ყველაფერი ერთ სვეტად ლაგდება;
+    - ბეჭდვა ერთსვეტიანია, შავ-თეთრი, ბმულების მისამართებით.
+  ფერები და შრიფტები ნასესხებია ნოტარიუსის საჯარო საიტის სტილიდან.
+  თემა: ბნელი ნაგულისხმევია, ნათელი სისტემის prefers-color-scheme-ით ან data-theme-ით.
+*/
+
+:root {
+  --bg:         #0f1216;
+  --bg-alt:     #14181e;
+  --surface:    #171b22;
+  --text:       #e9ebee;
+  --muted:      #9ba2ac;
+  --border:     #262d36;
+  --accent:     #8bbde3;
+  --accent-soft:#1b2733;
+  --flag:       #f0b429;
+  --flag-soft:  #2a2113;
+  --flag-line:  #b07d1a;
+  --ok:         #3ddc7f;
+  --ok-soft:    #16261d;
+  --plan:       #d3a6f0;
+  --plan-soft:  #261b2e;
+
+  --sans: "Noto Sans Georgian", "BPG Nino Mtavruli", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Noto Serif Georgian", "Noto Sans Georgian", Georgia, serif;
+
+  /* 1920 -> ~1730px, 2560 -> 2100px */
+  --content: clamp(1180px, 90vw, 2100px);
+  --side: 280px;
+  /* ~100 ქართული სიმბოლო სტრიქონში 18px შრიფტით (rem აქ 16px-ია) */
+  --measure: 72rem;
+  --radius: 12px;
+
+  color-scheme: dark;
+}
+
+/* ბნელი თემა ნაგულისხმევია; ნათელი ირთვება სისტემის პარამეტრით ან ხელით არჩეული data-theme="light"-ით */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg:         #fbfaf8;
+    --bg-alt:     #f4f1ec;
+    --surface:    #ffffff;
+    --text:       #17181c;
+    --muted:      #5b6068;
+    --border:     #e4e0d8;
+    --accent:     #1d4f77;
+    --accent-soft:#e8f0f7;
+    --flag:       #8a4b00;
+    --flag-soft:  #fdf3e2;
+    --flag-line:  #c9891b;
+    --ok:         #1b6b3a;
+    --ok-soft:    #eaf7ee;
+    --plan:       #7a3e9d;
+    --plan-soft:  #f4ecf8;
+    color-scheme: light;
+  }
+}
+
+:root[data-theme="light"] {
+  --bg:         #fbfaf8;
+  --bg-alt:     #f4f1ec;
+  --surface:    #ffffff;
+  --text:       #17181c;
+  --muted:      #5b6068;
+  --border:     #e4e0d8;
+  --accent:     #1d4f77;
+  --accent-soft:#e8f0f7;
+  --flag:       #8a4b00;
+  --flag-soft:  #fdf3e2;
+  --flag-line:  #c9891b;
+  --ok:         #1b6b3a;
+  --ok-soft:    #eaf7ee;
+  --plan:       #7a3e9d;
+  --plan-soft:  #f4ecf8;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+}
+
+a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+h1, h2, h3 { font-family: var(--serif); line-height: 1.3; font-weight: 600; }
+h1 { font-size: clamp(2.1rem, 2vw, 2.8rem); margin: .2em 0 .5em; max-width: 46ch; }
+h2 { font-size: 1.8rem; margin: 2.4em 0 .7em; padding-top: .7em; border-top: 1px solid var(--border); }
+h3 { font-size: 1.25rem; margin: 1.8em 0 .5em; }
+
+p, ul, ol, dl { margin: 0 0 1em; }
+ul, ol { padding-left: 1.4em; }
+li { margin-bottom: .45em; }
+
+/* ---------- ჩარჩო: სარჩევი მარცხნივ, ტექსტი მარჯვნივ ---------- */
+
+.shell {
+  width: 100%;
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: 36px 20px 96px;
+  display: grid;
+  grid-template-columns: var(--side) minmax(0, 1fr);
+  column-gap: 40px;
+  align-items: start;
+}
+
+.page { min-width: 0; }
+
+/* გაბმული ტექსტი საკითხავ სიგანეზე; ცხრილები, ბადე და ჯგუფები სრულ სიგანეზე */
+.page p, .page section > ul, .page section > ol, .page h3, .note { max-width: var(--measure); }
+.page .table-wrap p, .open-grid ol, .open-grid h3, .open-grid p { max-width: none; }
+
+.skip { position: absolute; left: -9999px; top: 8px; background: var(--surface); padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; z-index: 5; }
+.skip:focus { left: 12px; }
+
+/* ---------- სარჩევი ---------- */
+
+.toc {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 4px 4px 12px 0;
+  font-size: .92rem;
+  line-height: 1.45;
+}
+.toc h2 { margin: 0 0 .8em; padding: 0; border: 0; font-size: 1rem; color: var(--muted); font-family: var(--sans); font-weight: 600; }
+.toc ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; }
+.toc li { margin: 0; counter-increment: toc; }
+.toc a {
+  display: block;
+  padding: 7px 10px 7px 12px;
+  border-left: 3px solid var(--border);
+  color: var(--muted);
+  text-decoration: none;
+}
+.toc a::before { content: counter(toc) ". "; }
+.toc a:hover { color: var(--text); border-left-color: var(--muted); }
+.toc a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+
+/* ---------- თავსართი ---------- */
+
+.masthead { padding-bottom: 8px; }
+.status {
+  display: inline-block;
+  font-size: .88rem;
+  color: var(--flag);
+  background: var(--flag-soft);
+  border: 1px solid var(--flag-line);
+  border-radius: 999px;
+  padding: 3px 12px;
+}
+.lede { font-size: 1.12rem; color: var(--muted); }
+.meta { font-size: .94rem; color: var(--muted); }
+.note {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 22px;
+  font-size: .97rem;
+}
+.note p:last-child { margin-bottom: 0; }
+
+/* ---------- ნიშნები ---------- */
+
+/*
+  ღია საკითხის ნიშანი. ბეჭდვისას ფონი შეიძლება არ დაიბეჭდოს, ამიტომ ნიშანს
+  ჩარჩო და ტექსტის სტილიც აქვს, რომ შავ-თეთრ ფურცელზეც გამოირჩეოდეს.
+*/
+.flag {
+  display: inline;
+  font-size: .82em;
+  font-weight: 600;
+  color: var(--flag);
+  background: var(--flag-soft);
+  border: 1px dashed var(--flag-line);
+  border-radius: 6px;
+  padding: 1px 6px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.tag { display: inline-block; font-size: .8rem; font-weight: 600; border-radius: 6px; padding: 1px 8px; vertical-align: .1em; }
+.tag-ok { color: var(--ok); background: var(--ok-soft); border: 1px solid var(--ok); }
+.tag-plan { color: var(--plan); background: var(--plan-soft); border: 1px solid var(--plan); }
+
+/* ---------- ცხრილები: მთავარ სვეტს მთლიანად ავსებს ---------- */
+
+.table-wrap, .ladder-wrap {
+  width: 100%;
+  margin: 0 0 1.4em;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+table { border-collapse: collapse; width: 100%; font-size: .95rem; line-height: 1.55; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+thead th { background: var(--bg-alt); font-weight: 600; }
+tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
+td.num, th.num { text-align: right; white-space: nowrap; }
+caption { caption-side: top; text-align: left; padding: 12px 14px 0; color: var(--muted); font-size: .9rem; }
+table.options { font-size: .9rem; }
+table.options td:first-child { font-weight: 600; }
+
+/* ---------- ეტაპების ბადე: ეტაპები სვეტებად, ველები სტრიქონებად ---------- */
+
+.ladder { table-layout: fixed; font-size: .9rem; }
+.ladder .corner { width: 11rem; background: var(--bg-alt); border-bottom: 1px solid var(--border); }
+.ladder thead th { font-family: var(--serif); font-size: 1rem; line-height: 1.35; border-left: 1px solid var(--border); }
+.ladder .rung-name { display: block; margin-top: 4px; font-family: var(--sans); font-size: .8rem; font-weight: 500; color: var(--muted); }
+.ladder tbody th { background: var(--bg-alt); font-weight: 600; color: var(--muted); font-size: .86rem; }
+.ladder tbody td { border-left: 1px solid var(--border); }
+.ladder tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--bg-alt) 45%, transparent); }
+.ladder #phase-1 { background: var(--accent-soft); }
+
+.quote { margin: 0 0 1em; padding: 2px 0 2px 14px; border-left: 3px solid var(--border); color: var(--muted); }
+.launch-list li { margin-bottom: .7em; }
+
+/* ---------- ღია საკითხები, ორ სვეტად ადრესატის მიხედვით ---------- */
+
+.open-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; }
+.open-grid h3 { margin-top: .6em; }
+.open-list li { margin-bottom: .75em; }
+.open-list li.xref { list-style: none; color: var(--muted); font-size: .94rem; }
+
+/* ---------- წყაროები ---------- */
+
+.sources li { margin-bottom: .7em; font-size: .95rem; }
+.sources .src-note { color: var(--muted); }
+.sources a.bare { overflow-wrap: anywhere; }
+
+footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid var(--border); font-size: .92rem; color: var(--muted); }
+
+/* ---------- ვიწრო ფანჯარა: ერთი სვეტი ---------- */
+
+/* 1100px-ზე ვიწრო ფანჯარაში სარჩევი თავში ჩადის, ბადე კი ველების მიხედვით ლაგდება */
+@media (max-width: 1100px) {
+  .shell { display: block; padding: 24px 20px 64px; }
+  .toc { position: static; max-height: none; margin-bottom: 24px; border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; background: var(--surface); }
+  .table-wrap { overflow-x: auto; }
+  .table-wide { min-width: 720px; }
+  .open-grid { grid-template-columns: 1fr; }
+  .ladder, .ladder thead, .ladder tbody, .ladder tr, .ladder th, .ladder td { display: block; width: auto; }
+  .ladder .corner { display: none; }
+  .ladder thead th { border-left: 0; padding: 6px 14px; }
+  .ladder tbody th { margin-top: 8px; border-top: 1px solid var(--border); }
+  .ladder tbody td { border-left: 0; }
+  .ladder tbody td::before { content: attr(data-rung); display: block; font-size: .8rem; font-weight: 600; color: var(--muted); }
+}
+
+/* ---------- ბეჭდვა: ერთი სვეტი, შავი თეთრზე ---------- */
+
+@media print {
+  /* :not(#print) სპეციფიკურობას თემის სელექტორებზე მაღლა წევს, რომ ფურცელი ყოველთვის შავი თეთრზე იყოს */
+  :root:not(#print) {
+    --bg: #fff; --bg-alt: #fff; --surface: #fff; --text: #000; --muted: #222;
+    --border: #999; --accent: #000; --accent-soft: #fff; --flag: #000; --flag-soft: #fff; --flag-line: #000;
+    --ok: #000; --ok-soft: #fff; --plan: #000; --plan-soft: #fff;
+    color-scheme: light;
+  }
+  @page { margin: 18mm 16mm; }
+  body { font-size: 10.5pt; line-height: 1.5; background: var(--bg); color: var(--text); }
+  .shell { display: block; max-width: none; padding: 0; }
+  .toc { position: static; max-height: none; overflow: visible; border: 1px solid var(--text); padding: 8px 12px; margin-bottom: 16px; }
+  .toc a { border: 0; padding: 2px 0; color: var(--text); background: none; font-weight: normal; }
+  .page p, .page h3, .note, .page section > ul, .page section > ol { max-width: none; }
+  .skip { display: none; }
+  a { color: var(--text); text-decoration: none; }
+  /* გარე ბმულის მისამართი ტექსტის შემდეგ, რომ ფურცელზეც მოიძებნოს წყარო */
+  a[href^="http"]:not(.bare)::after { content: " (" attr(href) ")"; font-size: .85em; word-break: break-all; }
+  /* წყაროების სიაში ბმულის ტექსტი თავად მისამართია, ამიტომ მეორედ აღარ იბეჭდება */
+  a.bare { word-break: break-all; }
+  .flag { border: 1.2px solid var(--text); font-weight: 700; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tag { border: 1px solid var(--text); }
+  .table-wrap, .ladder-wrap { overflow: visible; border: 1px solid var(--text); }
+  table { font-size: 8.5pt; }
+  th, td { border-bottom: 1px solid var(--border); padding: 5px 7px; }
+  /* ეტაპების ბადე ფურცელზე ველების მიხედვით ლაგდება */
+  .ladder, .ladder thead, .ladder tbody, .ladder tr, .ladder th, .ladder td { display: block; width: auto; }
+  .ladder .corner { display: none; }
+  .ladder thead th, .ladder tbody td { border-left: 0; }
+  .ladder thead th, .ladder tbody td, .ladder #phase-1 { background: none !important; }
+  .ladder tbody td::before { content: attr(data-rung); display: block; font-weight: 700; }
+  .open-grid { display: block; }
+  h2 { break-after: avoid; page-break-after: avoid; border-top: 1px solid var(--text); }
+  h3 { break-after: avoid; page-break-after: avoid; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+}
