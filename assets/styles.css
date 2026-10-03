@@ -265,6 +265,9 @@ table.options td:first-child { font-weight: 600; }
 .rule { max-width: var(--measure); margin: 0 0 1.7em; padding: 16px 22px; background: var(--bg-alt); border-left: 5px solid var(--ok); border-radius: var(--radius); font-family: var(--serif); font-size: 1.12rem; }
 .rule p { margin: 0 0 .4em; }
 .rule p:last-child { margin-bottom: 0; }
+table.evaluation { font-size: .88rem; }
+table.evaluation td:first-child { font-weight: 600; width: 14%; }
+table.evaluation td:nth-child(2) { width: 12%; }
 table.kv th { width: 19rem; background: var(--bg-alt); color: var(--muted); font-weight: 600; }
 
 /* ---------- გაშვების სტატუსები ---------- */
