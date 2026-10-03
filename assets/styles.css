@@ -35,8 +35,8 @@
   /* 1920 -> ~1730px, 2560 -> 2100px */
   --content: clamp(1180px, 90vw, 2100px);
   --side: 280px;
-  /* ~100 ქართული სიმბოლო სტრიქონში 18px შრიფტით (rem აქ 16px-ია) */
-  --measure: 72rem;
+  /* ~90 ქართული სიმბოლო სტრიქონში 18px შრიფტით (rem აქ 16px-ია) */
+  --measure: 64rem;
   --radius: 12px;
 
   color-scheme: dark;
@@ -108,6 +108,8 @@ h3 { font-size: 1.25rem; margin: 1.8em 0 .5em; }
 h4 { font-family: var(--serif); font-size: 1.08rem; font-weight: 600; line-height: 1.35; margin: 1.5em 0 .45em; }
 
 p, ul, ol, dl { margin: 0 0 1em; }
+/* აბზაცებს შორის მინიმუმ ერთი სტრიქონის სიმაღლე */
+.page section p, .page section > ul, .page section > ol { margin-bottom: 1.7em; }
 ul, ol { padding-left: 1.4em; }
 li { margin-bottom: .45em; }
 
@@ -237,6 +239,34 @@ table.options td:first-child { font-weight: 600; }
 .quote { margin: 0 0 1em; padding: 2px 0 2px 14px; border-left: 3px solid var(--border); color: var(--muted); }
 .launch-list li { margin-bottom: .7em; }
 
+/* ---------- „მოკლედ“: ნოტარიუსისთვის საჩვენებელი ბლოკი ---------- */
+
+.summary {
+  max-width: var(--measure);
+  margin: 0 0 2em;
+  padding: 22px 30px 10px;
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius);
+  font-size: 1.08rem;
+  line-height: 1.95;
+}
+.summary-title { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; margin: 0 0 .4em; }
+.summary ul { margin: 0 0 .8em; padding-left: 1.2em; }
+.summary li { margin-bottom: .2em; }
+
+/* ---------- ქვეთავის დასკვნა, რომ დეტალი გამოტოვება შეიძლებოდეს ---------- */
+
+.lead-in { font-weight: 600; border-left: 3px solid var(--accent); padding: 2px 0 2px 14px; }
+
+/* ---------- გაშვების წესი და კონფიგურაცია ---------- */
+
+.rule { max-width: var(--measure); margin: 0 0 1.7em; padding: 16px 22px; background: var(--bg-alt); border-left: 5px solid var(--ok); border-radius: var(--radius); font-family: var(--serif); font-size: 1.12rem; }
+.rule p { margin: 0 0 .4em; }
+.rule p:last-child { margin-bottom: 0; }
+table.kv th { width: 19rem; background: var(--bg-alt); color: var(--muted); font-weight: 600; }
+
 /* ---------- გაშვების სტატუსები ---------- */
 
 .st { display: inline-block; font-size: .8rem; font-weight: 600; border-radius: 6px; padding: 1px 8px; margin-right: 4px; }
@@ -319,6 +349,7 @@ footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid var(--border);
   .ladder tbody td::before { content: attr(data-rung); display: block; font-weight: 700; }
   .open-grid { display: block; }
   .st { border: 1px solid var(--text); }
+  .summary, .rule { border: 1px solid var(--text); background: none; }
   .letter { border: 1px solid var(--text); padding: 12px 16px; }
   h2 { break-after: avoid; page-break-after: avoid; border-top: 1px solid var(--text); }
   h3 { break-after: avoid; page-break-after: avoid; }
